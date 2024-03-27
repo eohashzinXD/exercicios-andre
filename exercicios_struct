@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+
+struct Produto
+{
+    char nome[50];
+    float preco;
+    int quant;
+    int idProduto;
+
+};
+
+void addProduto(struct Produto estoque[], int *numProduto){
+
+    printf("Nome do produto: ");
+    scanf("%s", estoque[*numProduto].nome);
+    printf("Preço do Produto: ");
+    scanf("%f", &estoque[*numProduto].preco);
+    printf("Quantidade: ");
+    scanf("%d", &estoque[*numProduto].quant);
+    (*numProduto)++;
+}
+
+void exibirProduto(struct Produto estoque[], int numProduto){
+
+    printf("Estoque: \n");
+    for (int i = 0; i < numProduto; i++)
+    {
+        printf("Nome: %s \n Preço: %.2f \n Quantidade: %d \n", estoque[i].nome, estoque[i].preco, estoque[i].quant);
+    }
+    
+
+}
+
+int main(){
+    setlocale(LC_ALL, "");
+
+    struct Produto estoque[50];
+    int numProduto = 0;
+
+    int opcao;
+    do
+    {
+        printf("\n 1 - Adcionar Produto");
+        printf("\n 2 - Atualizar preço");
+        printf("\n 3 - Exibir produto");
+        printf("\n 4 - Sair");
+        printf("\n Opção:");
+        scanf("%d", &opcao);
+
+        switch (opcao)
+        {
+        case 1:
+            addProduto(estoque, &numProduto);
+            break;
+        case 2: printf("UPD PRECO");
+            break;
+        case 3: exibirProduto(estoque, numProduto);
+            break;
+        case 4: printf("SAINDO");
+            break;
+
+        default:
+            printf("OPÇÃO INVÁLIDA");
+            break;
+        }
+    } while (opcao != 4);
+    
+    return 0;
+}
