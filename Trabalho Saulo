@@ -1,0 +1,185 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_FUNCIONARIOS 100
+
+struct Funcionario {
+    int id;
+    char nome[50];
+    float salario;
+    int quantidade_filhos;
+};
+
+struct Funcionario funcionarios[MAX_FUNCIONARIOS];
+int num_funcionarios = 0;
+
+void incluirFuncionario() {
+    if (num_funcionarios >= MAX_FUNCIONARIOS) {
+        printf("Limite de funcionarios atingido!\n");
+        return;
+    }
+    
+    printf("Digite o ID do funcionario: ");
+    scanf("%d", &funcionarios[num_funcionarios].id);
+    
+    printf("Digite o nome do funcionario: ");
+    scanf("%s", funcionarios[num_funcionarios].nome);
+    
+    printf("Digite o salario do funcionario: ");
+    scanf("%f", &funcionarios[num_funcionarios].salario);
+    
+    printf("Digite a quantidade de filhos do funcionario: ");
+    scanf("%d", &funcionarios[num_funcionarios].quantidade_filhos);
+    
+    num_funcionarios++;
+}
+
+void listarFuncionarios() {
+    printf("Lista de funcionarios:\n");
+    for (int i = 0; i < num_funcionarios; i++) {
+        printf("ID: %d, Nome: %s, Salario: %.2f, Quantidade de Filhos: %d\n", 
+               funcionarios[i].id, funcionarios[i].nome, funcionarios[i].salario, funcionarios[i].quantidade_filhos);
+    }
+}
+
+void eliminarFuncionario() {
+    int id;
+    printf("Digite o ID do funcionario que deseja eliminar: ");
+    scanf("%d", &id);
+    
+    for (int i = 0; i < num_funcionarios; i++) {
+        if (funcionarios[i].id == id) {
+            for (int j = i; j < num_funcionarios - 1; j++) {
+                funcionarios[j] = funcionarios[j + 1];
+            }
+            num_funcionarios--;
+            printf("Funcionario removido com sucesso!\n");
+            return;
+        }
+    }
+    printf("Funcionario nao encontrado!\n");
+}
+
+void alterarFuncionario() {
+    int id;
+    printf("Digite o ID do funcionario que deseja alterar: ");
+    scanf("%d", &id);
+    
+    for (int i = 0; i < num_funcionarios; i++) {
+        if (funcionarios[i].id == id) {
+            printf("Digite o novo salario do funcionario: ");
+            scanf("%f", &funcionarios[i].salario);
+            
+            printf("Digite a nova quantidade de filhos do funcionario: ");
+            scanf("%d", &funcionarios[i].quantidade_filhos);
+            
+            printf("Funcionario alterado com sucesso!\n");
+            return;
+        }
+    }
+    printf("Funcionario nao encontrado!\n");
+}
+
+void listarFuncionariosComMaisDeDoisFilhos() {
+    printf("Funcionarios com mais de dois filhos:\n");
+    for (int i = 0; i < num_funcionarios; i++) {
+        if (funcionarios[i].quantidade_filhos > 2) {
+            printf("ID: %d, Nome: %s, Salario: %.2f, Quantidade de Filhos: %d\n", 
+                   funcionarios[i].id, funcionarios[i].nome, funcionarios[i].salario, funcionarios[i].quantidade_filhos);
+        }
+    }
+}
+
+float calcularSomaSalarios() {
+    float soma = 0;
+    for (int i = 0; i < num_funcionarios; i++) {
+        soma += funcionarios[i].salario;
+    }
+    return soma;
+}
+
+float encontrarMaiorSalario() {
+    float maior = funcionarios[0].salario;
+    for (int i = 1; i < num_funcionarios; i++) {
+        if (funcionarios[i].salario > maior) {
+            maior = funcionarios[i].salario;
+        }
+    }
+    return maior;
+}
+
+float encontrarMenorSalario() {
+    float menor = funcionarios[0].salario;
+    for (int i = 1; i < num_funcionarios; i++) {
+        if (funcionarios[i].salario < menor) {
+            menor = funcionarios[i].salario;
+        }
+    }
+    return menor;
+}
+
+void aumentarSalarioAbaixoDeMil() {
+    for (int i = 0; i < num_funcionarios; i++) {
+        if (funcionarios[i].salario < 1000.00) {
+            funcionarios[i].salario *= 1.1; // Aumento de 10%
+        }
+    }
+    printf("Salarios aumentados com sucesso!\n");
+}
+
+int main() {
+    int opcao;
+    
+    do {
+        printf("\nMenu de opcoes:\n");
+        printf("1) Eliminar um registro\n");
+        printf("2) Alterar um registro\n");
+        printf("3) Incluir um registro\n");
+        printf("4) Listar todos os registros\n");
+        printf("5) Listar apenas os registros que possuam funcionarios com mais de 2 filhos\n");
+        printf("6) Retornar a soma de todos os salarios da empresa\n");
+        printf("7) Retornar o maior salario\n");
+        printf("8) Retornar o menor salario\n");
+        printf("9) Aumentar o salario dos funcionarios que possuem salario abaixo de R$1000,00 em 10%%\n");
+        printf("0) Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+        
+        switch(opcao) {
+            case 1:
+                eliminarFuncionario();
+                break;
+            case 2:
+                alterarFuncionario();
+                break;
+            case 3:
+                incluirFuncionario();
+                break;
+            case 4:
+                listarFuncionarios();
+                break;
+            case 5:
+                listarFuncionariosComMaisDeDoisFilhos();
+                break;
+            case 6:
+                printf("Soma dos salarios: %.2f\n", calcularSomaSalarios());
+                break;
+            case 7:
+                printf("Maior salario: %.2f\n", encontrarMaiorSalario());
+                break;
+            case 8:
+                printf("Menor salario: %.2f\n", encontrarMenorSalario());
+                break;
+            case 9:
+                aumentarSalarioAbaixoDeMil();
+                break;
+            case 0:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opcao invalida!\n");
+        }
+    } while(opcao != 0);
+    
+    return 0;
+}
